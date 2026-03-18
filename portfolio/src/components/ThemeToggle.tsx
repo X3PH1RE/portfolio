@@ -7,9 +7,9 @@ export default function ThemeToggle() {
   // Initialize theme on mount
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme')
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
     
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+    // Default to light mode unless the user explicitly saved 'dark' previously
+    if (savedTheme === 'dark') {
       setIsDark(true)
       document.documentElement.setAttribute('data-theme', 'dark')
       document.documentElement.classList.add('dark')
