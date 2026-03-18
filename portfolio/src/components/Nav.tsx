@@ -88,7 +88,7 @@ export default function Nav() {
           ))}
         </ul>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        <div className="nav-actions">
           <a href="#contact" className="nav-cta">
             Contact Me ↗
           </a>

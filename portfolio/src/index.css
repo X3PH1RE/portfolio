@@ -277,6 +277,7 @@ button { cursor: pointer; font-family: var(--font-sans); border: none; backgroun
   display: flex;
   flex-direction: column;
   line-height: 1.2;
+  white-space: nowrap;
 }
 
 .nav-logo-sub {
@@ -328,52 +329,30 @@ button { cursor: pointer; font-family: var(--font-sans); border: none; backgroun
 
 .nav-cta::after { display: none !important; }
 
-/* Mobile menu */
-.nav-hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  margin-left: auto;
-  padding: 6px;
-}
-
-.nav-hamburger span {
-  display: block;
-  width: 24px;
-  height: 2px;
-  background: var(--text);
-  transition: all 0.3s;
-}
-
-.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-.nav-hamburger.open span:nth-child(2) { opacity: 0; }
-.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-.nav-mobile {
-  display: none;
-  position: fixed;
-  top: var(--nav-h);
-  left: 0;
-  right: 0;
-  background: var(--bg);
-  padding: 24px 40px 40px;
-  border-bottom: 2px solid var(--border);
-  flex-direction: column;
-  gap: 16px;
-  z-index: 99;
-}
-
-.nav-mobile.open { display: flex; }
-.nav-mobile a {
-  font-size: 1.2rem;
-  font-weight: 500;
-  color: var(--text);
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 @media (max-width: 768px) {
   .nav-links { display: none; }
-  .nav-hamburger { display: flex; }
-  .nav { padding: 0 24px; }
+  .nav-wrapper { padding: 0 25px; }
+  .nav { 
+    padding: 10px 16px; 
+    width: 100%;
+    justify-content: space-between;
+    gap: 8px;
+    border-radius: 100px;
+  }
+  .nav-logo { gap: 8px; }
+  .nav-logo-text { font-size: 0.85rem; }
+  .nav-logo-sub { display: none; }
+  .nav-actions { gap: 8px; }
+  .nav-cta { 
+    padding: 8px 12px;
+    font-size: 0.75rem !important;
+  }
 }
 
 /* ============================================================
@@ -506,7 +485,7 @@ button { cursor: pointer; font-family: var(--font-sans); border: none; backgroun
 
 .hero-title {
   font-family: var(--font-pixel);
-  font-size: clamp(3.5rem, 8vw, 6.5rem);
+  font-size: clamp(2.5rem, 8vw, 6.5rem);
   font-weight: 400;
   line-height: 1.1;
   letter-spacing: -1px;
