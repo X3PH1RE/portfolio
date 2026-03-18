@@ -29,16 +29,26 @@
   --bg-card:         #242424;
   --text:            #f9f8f6; /* warm paper cream */
   --text-muted:      #a09e9a;
-  --border:          #f9f8f6;
+  --border:          #404040; /* lighter border for dark mode */
+}
+
+[data-theme='dark'] body {
+  background-image: radial-gradient(rgba(249, 248, 246, 0.08) 1px, transparent 1px);
 }
 
 /* ============================================================
    THEME TRANSITION
    ============================================================ */
-::view-transition-old(root),
-::view-transition-new(root) {
+::view-transition-group(root) {
+  animation-duration: 0.7s;
+  animation-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+::view-transition-new(root),
+::view-transition-old(root) {
   animation: none;
   mix-blend-mode: normal;
+  display: block;
 }
 
 ::view-transition-old(root) {
@@ -46,15 +56,16 @@
 }
 
 ::view-transition-new(root) {
-  z-index: 2;
+  z-index: 999999;
 }
 
-.dark::view-transition-old(root) {
-  z-index: 2;
-}
-
-.dark::view-transition-new(root) {
-  z-index: 1;
+/* Fallback for browsers that don't support View Transitions */
+.theme-transition,
+.theme-transition *,
+.theme-transition *:before,
+.theme-transition *:after {
+  transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease, box-shadow 0.5s ease !important;
+  transition-behavior: allow-discrete;
 }
 
 /* ============================================================
@@ -89,6 +100,10 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 9998;
+}
+
+[data-theme='dark'] body::after {
+  opacity: 0.08;
 }
 
 /* Custom scrollbar */
@@ -206,7 +221,8 @@ button { cursor: pointer; font-family: var(--font-sans); border: none; backgroun
   display: flex;
   align-items: center;
   padding: 0 40px;
-  background: rgba(249, 248, 246, 0.9);
+  background: var(--bg);
+  background: color-mix(in srgb, var(--bg) 90%, transparent);
   backdrop-filter: blur(10px);
   border-bottom: 2px solid transparent;
   transition: border-color 0.3s;
@@ -417,12 +433,28 @@ button { cursor: pointer; font-family: var(--font-sans); border: none; backgroun
 .btn-primary {
   background: var(--text);
   color: var(--bg);
+  border-color: var(--text);
 }
 
 .btn-primary:hover {
   background: var(--text);
   color: var(--bg);
   box-shadow: 6px 6px 0px rgba(45, 44, 42, 0.3);
+}
+
+[data-theme='dark'] .btn-primary:hover {
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme='dark'] .btn {
+  box-shadow: 3px 3px 0px rgba(0, 0, 0, 0.3);
+}
+
+[data-theme='dark'] .btn:hover {
+  box-shadow: 6px 6px 0px rgba(0, 0, 0, 0.5);
+  background: var(--accent-yellow);
+  color: #1a1a1a;
+  border-color: var(--accent-yellow);
 }
 
 /* ============================================================

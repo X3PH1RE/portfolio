@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { flushSync } from 'react-dom'
 
 export default function ThemeToggle() {
   const [isDark, setIsDark] = useState(false)
@@ -15,12 +16,16 @@ export default function ThemeToggle() {
     }
   }, [])
 
-  const toggleTheme = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const toggleTheme = (e: React.MouseEvent<HTMLButtonElement>) => {
     const willBeDark = !isDark
     
-    // Fallback for browsers that don't support View Transitions API
+    // Fallback for browsers that don't support View Transitions API (Firefox, Safari)
     if (!document.startViewTransition) {
+      document.documentElement.classList.add('theme-transition')
       applyTheme(willBeDark)
+      setTimeout(() => {
+        document.documentElement.classList.remove('theme-transition')
+      }, 500)
       return
     }
 
@@ -35,23 +40,23 @@ export default function ThemeToggle() {
     )
 
     const transition = document.startViewTransition(() => {
-      applyTheme(willBeDark)
+      flushSync(() => {
+        applyTheme(willBeDark)
+      })
     })
 
     transition.ready.then(() => {
-      const clipPath = [
-        `circle(0px at ${x}px ${y}px)`,
-        `circle(${endRadius}px at ${x}px ${y}px)`
-      ]
-
       document.documentElement.animate(
         {
-          clipPath: willBeDark ? clipPath : [...clipPath].reverse()
+          clipPath: [
+            `circle(0px at ${x}px ${y}px)`,
+            `circle(${endRadius}px at ${x}px ${y}px)`
+          ]
         },
         {
-          duration: 600,
-          easing: 'ease-in-out',
-          pseudoElement: willBeDark ? '::view-transition-new(root)' : '::view-transition-old(root)'
+          duration: 700,
+          easing: 'cubic-bezier(0.76, 0, 0.24, 1)',
+          pseudoElement: '::view-transition-new(root)'
         }
       )
     })
