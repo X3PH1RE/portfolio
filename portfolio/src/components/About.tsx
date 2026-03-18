@@ -22,13 +22,11 @@ export default function About() {
 
   return (
     <section id="about" className="section" ref={sectionRef}>
-      <div className="section-label reveal">01. ABOUT</div>
-      <h2 className="section-title reveal reveal-delay-1">
-        About <span className="serif-italic">me.</span>
-      </h2>
-
       <div className="about-grid">
         <div className="about-text">
+          <h2 className="section-title reveal reveal-delay-1" style={{ marginBottom: '24px' }}>
+            About <span className="serif-italic">me.</span>
+          </h2>
           <p className="reveal reveal-delay-2">
             I'm an IT undergrad at CUSAT, Kochi, but most of my work happens outside the classroom. I've somehow managed to co-found a startup, write code for hospitals in Japan, and play with robots at a nuclear research center—all while trying to keep my GPA intact.
           </p>
@@ -40,21 +38,12 @@ export default function About() {
           </p>
         </div>
 
-        <div className="about-image-card window-card reveal reveal-delay-2">
-          <div className="window-header">
-            <span className="window-dot"></span>
-            <span className="window-dot"></span>
-            <span className="window-dot"></span>
-          </div>
-          <div className="window-body">
-            <div className="about-photo-placeholder">
-              [ Photo ]
-            </div>
+        <div className="photo-stack reveal reveal-delay-2">
+          <div className="photo-card photo-current">
+            <img src="/current.jpg" alt="Ashwin now" style={{ objectPosition: 'center 40%', transform: 'scale(1.3)' }} onError={(e) => { e.currentTarget.src = 'https://placehold.co/400x500/2d2c2a/f9f8f6?text=Current+Photo'; }} />
           </div>
         </div>
       </div>
-
-      <div className="dashed-line reveal reveal-delay-3"></div>
     </section>
   )
 }

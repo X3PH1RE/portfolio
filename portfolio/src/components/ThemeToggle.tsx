@@ -82,23 +82,22 @@ export default function ThemeToggle() {
         width: '40px',
         height: '40px',
         borderRadius: '50%',
-        background: 'var(--text)',
-        color: 'var(--bg)',
-        border: 'none',
+        background: 'var(--bg)',
+        color: 'var(--text)',
+        border: '1px solid var(--border)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         cursor: 'pointer',
-        boxShadow: '2px 2px 0px var(--border)',
-        transition: 'transform 0.2s, box-shadow 0.2s',
+        transition: 'transform 0.2s, background 0.2s',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.transform = 'translate(-2px, -2px)'
-        e.currentTarget.style.boxShadow = '4px 4px 0px var(--border)'
+        e.currentTarget.style.transform = 'scale(1.05)'
+        e.currentTarget.style.background = 'var(--accent-yellow)'
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.transform = 'none'
-        e.currentTarget.style.boxShadow = '2px 2px 0px var(--border)'
+        e.currentTarget.style.background = 'var(--bg)'
       }}
       aria-label="Toggle theme"
     >

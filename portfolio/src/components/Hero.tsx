@@ -42,25 +42,15 @@ export default function Hero() {
   return (
     <section id="home" className="section hero">
       <div className="hero-content">  
-
         <h1 className="hero-title reveal visible reveal-delay-1">
-          Heyyy I'm Ashwin.<br />
-          I <span className="serif-italic" style={{ color: 'var(--accent)' }}>{typedText}</span>
-          <span style={{ fontWeight: 300, animation: 'blink 1s step-end infinite' }}>|</span>
+          Welcome to<br />
+          <span className="serif-italic">ashwin's</span> corner<br />
+          of the internet.
         </h1>
 
         <p className="hero-desc reveal visible reveal-delay-2">
-          I'm a software engineer based in Kochi. I spend my time building systems that solve actual problems—from untangling city traffic with AI to teaching drones how to land without crashing.
+          ashwin likes to <span>{typedText}</span>
         </p>
-
-        <div className="hero-actions reveal visible reveal-delay-3">
-          <a href="#projects" className="btn btn-primary">
-            View Projects
-          </a>
-          <a href="#contact" className="btn">
-            Get in touch
-          </a>
-        </div>
       </div>
     </section>
   )
