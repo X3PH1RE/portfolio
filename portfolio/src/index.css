@@ -91,12 +91,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding: 16px;
+  padding-bottom: env(safe-area-inset-bottom, 16px);
 }
 
 #root {
   background: var(--bg);
   border-radius: 24px;
-  min-height: calc(100svh - 32px);
+  min-height: calc(100svh - 32px - env(safe-area-inset-bottom, 0px));
   position: relative;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0,0,0,0.2);
