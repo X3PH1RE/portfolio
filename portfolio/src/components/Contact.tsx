@@ -27,7 +27,7 @@ export default function Contact() {
           Let's <span className="serif-italic" style={{ color: 'var(--accent)' }}>talk.</span>
         </h2>
         <p className="reveal reveal-delay-1">
-          I'm always open to discussing new projects, opportunities, or just talking about tech. Feel free to reach out.
+          I'm always open to discussing new projects, opportunities, talking about tech, or if you just wanna spill some tea. Feel free to reach out.
         </p>
 
         <div className="social-links reveal reveal-delay-2">
