@@ -9,6 +9,7 @@ import Skills from './components/Skills'
 import Leadership from './components/Leadership'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
+import Pokemon from './components/Pokemon'
 import './index.css'
 
 const KONAMI_CODE = [
@@ -89,6 +90,7 @@ export default function App() {
         <Contact />
       </main>
       <Footer />
+      <Pokemon />
 
       {showEasterEgg && (
         <div className="konami-overlay" onClick={() => setShowEasterEgg(false)}>
