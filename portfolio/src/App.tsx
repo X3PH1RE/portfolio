@@ -10,6 +10,7 @@ import Leadership from './components/Leadership'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import Pokemon from './components/Pokemon'
+import { Analytics } from "@vercel/analytics/react"
 import './index.css'
 
 const KONAMI_CODE = [
@@ -91,6 +92,7 @@ export default function App() {
       </main>
       <Footer />
       <Pokemon />
+      <Analytics />
 
       {showEasterEgg && (
         <div className="konami-overlay" onClick={() => setShowEasterEgg(false)}>
