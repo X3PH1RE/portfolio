@@ -74,12 +74,13 @@ export default function Pokemon() {
           }
 
           // Add a slight bobbing effect while walking
-          const bob = Math.sin(time * 0.001) * 1.5; // Slower, more subtle bob (1.5px)
+          const bob = Math.sin(time * 0.005) * 1.5; // Slower, more subtle bob (1.5px)
           containerRef.current.style.transform = `translate(${posRef.current}px, ${bob}px)`;
         } else {
           // Reset bobbing when idle
           containerRef.current.style.transform = `translate(${posRef.current}px, 0px)`;
         }
+
         // Flip image based on direction (sprites face left by default)
         imgRef.current.style.transform = `scaleX(${dirRef.current === 1 ? -1 : 1})`;
       }

@@ -40,7 +40,16 @@ export default function About() {
 
         <div className="photo-stack reveal reveal-delay-2">
           <div className="photo-card photo-current">
-            <img src="/current.jpg" alt="Ashwin now" style={{ objectPosition: 'center 40%', transform: 'scale(1.3)' }} onError={(e) => { e.currentTarget.src = 'https://placehold.co/400x500/2d2c2a/f9f8f6?text=Current+Photo'; }} />
+            <img 
+              src="/photo.jpeg" 
+              alt="Ashwin" 
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                objectFit: 'cover',
+                objectPosition: 'center'
+              }} 
+            />
           </div>
         </div>
       </div>
