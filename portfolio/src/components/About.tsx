@@ -34,7 +34,7 @@ export default function About() {
             I like the entire process of shipping software—from sketching out the initial architecture on a napkin to writing the code and seeing it run in production. I enjoy taking ownership of a project and making sure it actually solves the problem it was meant to.
           </p>
           <p className="reveal reveal-delay-3">
-            Right now, I'm working with the local police to pilot an intelligent traffic management system. When I'm not doing that, I'm usually organizing hackathons or trying to convince my code to compile on the first try.
+          Right now, I’m building stuff in the urban mobility + smart systems space, trying to make things actually work outside demos. Otherwise, I’m either working on new ideas, organizing events, or negotiating with my codebase like it’s a stubborn teammate.
           </p>
         </div>
 
