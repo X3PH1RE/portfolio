@@ -41,15 +41,6 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [konamiIndex])
 
-  // Console log easter egg
-  useEffect(() => {
-    console.log(
-      "%c✨ You found the console! ✨\n\n%cIf you're reading this, you probably build things too.\nLet's chat: ashwinmenon502@gmail.com\n\n%cP.S. Try the Konami code on the keyboard (↑ ↑ ↓ ↓ ← → ← → B A)",
-      "color: #ff6b4a; font-size: 20px; font-family: sans-serif; font-weight: bold;",
-      "color: #2d2c2a; font-size: 14px; font-family: sans-serif;",
-      "color: #6b6965; font-size: 12px; font-family: monospace; font-style: italic;"
-    )
-  }, [])
 
   return (
     <>
