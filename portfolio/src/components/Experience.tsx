@@ -4,11 +4,11 @@ const experiences = [
   {
     role: 'Co-Founder',
     company: 'UrbanVerve',
-    period: 'Sep 2023 – Present',
+    period: 'Sep 2023 – Mar 2026',
     points: [
       'Trying to fix Kochi\'s infamous traffic using cameras and AI.',
       'Built computer vision pipelines using OpenCV and CNNs to analyze real-time CCTV feeds.',
-      'Currently piloting the system with the local police (yes, they actually let us test it on real roads).',
+      'Went on to pilot the system with the local police (yes, they actually let us test it on real roads).',
     ],
   },
   {
