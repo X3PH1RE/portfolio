@@ -200,8 +200,17 @@ export default function DataDashboard() {
   const formatDate = (isoStr: string) => {
     if (!isoStr) return 'N/A';
     try {
-      const d = new Date(isoStr);
-      return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' (' + d.toLocaleDateString() + ')';
+      const cleanStr = (isoStr.endsWith('Z') || isoStr.includes('+')) ? isoStr : isoStr.replace(' ', 'T') + 'Z';
+      const d = new Date(cleanStr);
+      return d.toLocaleString('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        day: '2-digit',
+        month: 'short',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: true
+      }) + ' IST';
     } catch (e) {
       return isoStr;
     }
