@@ -1,6 +1,6 @@
 // Portfolio Analytics & Click Tracker SDK
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
 
 function getOrCreateSessionId(): string {
   let id = sessionStorage.getItem('portfolio_session_id');

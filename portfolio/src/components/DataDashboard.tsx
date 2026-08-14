@@ -84,7 +84,7 @@ interface StatsResponse {
   recentSessions: Session[];
 }
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || '';
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
 
 export default function DataDashboard() {
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('analytics_admin_token'));
@@ -168,7 +168,11 @@ export default function DataDashboard() {
       setToken(data.token);
       setPassword('');
     } catch (err: any) {
-      setLoginError(err.message || 'Login failed');
+      if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
+        setLoginError('Cannot connect to backend server. If using Render free tier, it may be waking up (takes ~30s), or check VITE_API_BASE_URL in Vercel.');
+      } else {
+        setLoginError(err.message || 'Login failed');
+      }
     } finally {
       setIsLoggingIn(false);
     }
