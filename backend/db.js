@@ -285,8 +285,8 @@ export const getStats = async () => {
     });
 
     const dailyStats = Object.values(dailyCounts)
-      .map((item: any) => ({ date: item.date, visitors: item.visitors, uniqueIPs: item.ips.size }))
-      .sort((a: any, b: any) => a.date.localeCompare(b.date));
+      .map((item) => ({ date: item.date, visitors: item.visitors, uniqueIPs: item.ips.size }))
+      .sort((a, b) => a.date.localeCompare(b.date));
 
     return {
       summary: { totalVisitors, uniqueIPs, totalClicks, avgDurationSeconds },
