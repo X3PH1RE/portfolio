@@ -152,6 +152,9 @@ export default function DataDashboard() {
     setLoginError('');
     setIsLoggingIn(true);
 
+    const targetUrl = `${API_BASE || '(relative /api)'}/api/admin/login`;
+    console.log('Attempting login request to:', targetUrl);
+
     try {
       const res = await fetch(`${API_BASE}/api/admin/login`, {
         method: 'POST',
@@ -168,8 +171,10 @@ export default function DataDashboard() {
       setToken(data.token);
       setPassword('');
     } catch (err: any) {
+      console.error('Login error details:', err);
       if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
-        setLoginError('Cannot connect to backend server. If using Render free tier, it may be waking up (takes ~30s), or check VITE_API_BASE_URL in Vercel.');
+        const urlUsed = API_BASE ? API_BASE : 'relative URL (/api/admin/login)';
+        setLoginError(`Cannot connect to backend server at [${urlUsed}]. Verify your Render service is awake and VITE_API_BASE_URL is set in Vercel.`);
       } else {
         setLoginError(err.message || 'Login failed');
       }

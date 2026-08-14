@@ -13,7 +13,7 @@ const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'ashwin_portfolio_data';
 const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_analytics_jwt_key_2026';
 
-app.use(cors({ origin: process.env.ALLOWED_ORIGIN || '*' }));
+app.use(cors());
 app.use(express.json());
 
 // Initialize SQLite database
