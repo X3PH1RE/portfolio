@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import './DataDashboard.css';
 
 interface Summary {
@@ -72,6 +72,12 @@ interface Session {
   clicks: Click[];
 }
 
+interface DailyStat {
+  date: string;
+  visitors: number;
+  uniqueIPs: number;
+}
+
 interface StatsResponse {
   summary: Summary;
   topOrganizations: Organization[];
@@ -82,6 +88,7 @@ interface StatsResponse {
   browserBreakdown: ItemCount[];
   topLinks: TopLink[];
   recentSessions: Session[];
+  dailyStats: DailyStat[];
 }
 
 const API_BASE = (import.meta.env.VITE_API_BASE_URL || '').replace(/\/$/, '');
@@ -667,7 +674,142 @@ export default function DataDashboard() {
             </div>
           </div>
         )}
+
+        {/* Visitor Trends Graph Section (Always visible below tabs) */}
+        <VisitorGraph dailyStats={stats?.dailyStats} />
       </main>
+    </div>
+  );
+}
+
+function VisitorGraph({ dailyStats = [] }: { dailyStats?: DailyStat[] }) {
+  const [timeRange, setTimeRange] = useState<7 | 30 | 90>(7);
+  const [hoveredData, setHoveredData] = useState<{ date: string; visitors: number; uniqueIPs: number; formattedDate: string } | null>(null);
+
+  // Generate continuous date range for selected time range
+  const chartData = useMemo(() => {
+    const statsMap = new Map<string, { visitors: number; uniqueIPs: number }>();
+    dailyStats.forEach(s => {
+      statsMap.set(s.date, { visitors: s.visitors || 0, uniqueIPs: s.uniqueIPs || 0 });
+    });
+
+    const list = [];
+    const now = new Date();
+    const istNow = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
+
+    for (let i = timeRange - 1; i >= 0; i--) {
+      const d = new Date(istNow);
+      d.setDate(d.getDate() - i);
+      const dateStr = d.toISOString().split('T')[0];
+      const found = statsMap.get(dateStr) || { visitors: 0, uniqueIPs: 0 };
+      
+      const formattedDate = d.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+      list.push({
+        date: dateStr,
+        formattedDate,
+        visitors: found.visitors,
+        uniqueIPs: found.uniqueIPs
+      });
+    }
+
+    return list;
+  }, [dailyStats, timeRange]);
+
+  const maxVal = Math.max(...chartData.map(d => d.visitors), 5);
+  const totalVisitorsInRange = chartData.reduce((acc, curr) => acc + curr.visitors, 0);
+  const totalUniqueInRange = chartData.reduce((acc, curr) => acc + curr.uniqueIPs, 0);
+  const avgDailyVisitors = Math.round(totalVisitorsInRange / timeRange);
+  const peakDay = chartData.reduce((max, curr) => curr.visitors > max.visitors ? curr : max, { visitors: 0, formattedDate: 'N/A' });
+
+  return (
+    <div className="dash-card dash-graph-card">
+      <div className="dash-card-header">
+        <div>
+          <h3>📈 Visitor Trends over Time</h3>
+          <p className="dash-card-desc">Daily traffic breakdown & unique visitor counts</p>
+        </div>
+
+        <div className="dash-graph-controls">
+          <select 
+            value={timeRange} 
+            onChange={(e) => setTimeRange(Number(e.target.value) as 7 | 30 | 90)}
+            className="dash-select"
+          >
+            <option value={7}>Last 7 Days</option>
+            <option value={30}>1 Month (Last 30 Days)</option>
+            <option value={90}>3 Months (Last 90 Days)</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Summary Metrics */}
+      <div className="dash-graph-summary">
+        <div className="dash-graph-pill">
+          <span>Range Total</span>
+          <strong>{totalVisitorsInRange} visits</strong>
+        </div>
+        <div className="dash-graph-pill">
+          <span>Unique IPs</span>
+          <strong>{totalUniqueInRange} unique</strong>
+        </div>
+        <div className="dash-graph-pill">
+          <span>Daily Average</span>
+          <strong>{avgDailyVisitors} / day</strong>
+        </div>
+        <div className="dash-graph-pill">
+          <span>Peak Day</span>
+          <strong>{peakDay.visitors} ({peakDay.formattedDate})</strong>
+        </div>
+      </div>
+
+      {/* Chart Visual */}
+      <div className="dash-chart-container">
+        {hoveredData && (
+          <div className="dash-chart-tooltip">
+            <strong>{hoveredData.formattedDate} ({hoveredData.date})</strong>
+            <div>Total Pageviews: <span>{hoveredData.visitors}</span></div>
+            <div>Unique Visitors: <span>{hoveredData.uniqueIPs}</span></div>
+          </div>
+        )}
+
+        <div className="dash-bars-wrapper">
+          {chartData.map((d, idx) => {
+            const heightPercent = (d.visitors / maxVal) * 100;
+            const uniquePercent = (d.uniqueIPs / maxVal) * 100;
+            const showLabel = timeRange === 7 || (timeRange === 30 && idx % 3 === 0) || (timeRange === 90 && idx % 7 === 0);
+
+            return (
+              <div 
+                key={d.date} 
+                className="dash-bar-column"
+                onMouseEnter={() => setHoveredData(d)}
+                onMouseLeave={() => setHoveredData(null)}
+              >
+                <div className="dash-bar-track">
+                  <div 
+                    className="dash-bar-fill" 
+                    style={{ height: `${Math.max(heightPercent, d.visitors > 0 ? 8 : 2)}%` }}
+                  >
+                    {d.visitors > 0 && <span className="dash-bar-val">{d.visitors}</span>}
+                  </div>
+                  {d.uniqueIPs > 0 && (
+                    <div 
+                      className="dash-bar-unique-indicator" 
+                      style={{ bottom: `${Math.max(uniquePercent, 4)}%` }}
+                    />
+                  )}
+                </div>
+                <span className="dash-bar-date">{showLabel ? d.formattedDate : ''}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      
+      <div className="dash-graph-legend">
+        <span className="dash-legend-item"><span className="dash-legend-color total"></span> Total Pageviews</span>
+        <span className="dash-legend-item"><span className="dash-legend-color unique"></span> Unique Visitor Dot</span>
+      </div>
     </div>
   );
 }

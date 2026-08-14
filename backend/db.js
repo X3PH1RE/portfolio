@@ -269,6 +269,25 @@ export const getStats = async () => {
       clicks: clickMap[s.session_id] || []
     }));
 
+    // Calculate daily visitor trends in IST
+    const dailyCounts = {};
+    sessions?.forEach(s => {
+      if (!s.start_time) return;
+      const raw = (s.start_time.endsWith('Z') || s.start_time.includes('+')) ? s.start_time : s.start_time.replace(' ', 'T') + 'Z';
+      const d = new Date(raw);
+      const istDateStr = d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+      
+      if (!dailyCounts[istDateStr]) {
+        dailyCounts[istDateStr] = { date: istDateStr, visitors: 0, ips: new Set() };
+      }
+      dailyCounts[istDateStr].visitors += 1;
+      if (s.ip) dailyCounts[istDateStr].ips.add(s.ip);
+    });
+
+    const dailyStats = Object.values(dailyCounts)
+      .map((item: any) => ({ date: item.date, visitors: item.visitors, uniqueIPs: item.ips.size }))
+      .sort((a: any, b: any) => a.date.localeCompare(b.date));
+
     return {
       summary: { totalVisitors, uniqueIPs, totalClicks, avgDurationSeconds },
       topOrganizations,
@@ -278,7 +297,8 @@ export const getStats = async () => {
       osBreakdown,
       browserBreakdown,
       topLinks,
-      recentSessions
+      recentSessions,
+      dailyStats
     };
   }
 
@@ -321,6 +341,16 @@ export const getStats = async () => {
     })
   );
 
+  const dailyStats = await queryAll(`
+    SELECT 
+      strftime('%Y-%m-%d', datetime(start_time, '+5.5 hours')) as date,
+      COUNT(*) as visitors,
+      COUNT(DISTINCT ip) as uniqueIPs
+    FROM sessions
+    GROUP BY date
+    ORDER BY date ASC
+  `);
+
   return {
     summary: {
       totalVisitors: totalVisitors?.count || 0,
@@ -335,7 +365,8 @@ export const getStats = async () => {
     osBreakdown,
     browserBreakdown,
     topLinks,
-    recentSessions
+    recentSessions,
+    dailyStats
   };
 };
 
