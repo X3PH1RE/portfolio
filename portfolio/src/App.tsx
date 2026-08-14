@@ -10,6 +10,8 @@ import Leadership from './components/Leadership'
 import Contact from './components/Contact'
 import Footer from './components/Footer'
 import Pokemon from './components/Pokemon'
+import DataDashboard from './components/DataDashboard'
+import { initAnalytics } from './utils/analytics'
 import { Analytics } from "@vercel/analytics/react"
 import './index.css'
 
@@ -22,8 +24,17 @@ const KONAMI_CODE = [
 export default function App() {
   const [konamiIndex, setKonamiIndex] = useState(0)
   const [showEasterEgg, setShowEasterEgg] = useState(false)
+  const isDataRoute = window.location.pathname.startsWith('/data')
 
   useEffect(() => {
+    if (!isDataRoute) {
+      initAnalytics()
+    }
+  }, [isDataRoute])
+
+  useEffect(() => {
+    if (isDataRoute) return
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.code === KONAMI_CODE[konamiIndex]) {
         if (konamiIndex === KONAMI_CODE.length - 1) {
@@ -39,8 +50,11 @@ export default function App() {
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [konamiIndex])
+  }, [konamiIndex, isDataRoute])
 
+  if (isDataRoute) {
+    return <DataDashboard />
+  }
 
   return (
     <>
@@ -113,3 +127,4 @@ export default function App() {
     </>
   )
 }
+
