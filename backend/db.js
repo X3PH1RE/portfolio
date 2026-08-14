@@ -269,13 +269,13 @@ export const getStats = async () => {
       clicks: clickMap[s.session_id] || []
     }));
 
-    // Calculate daily visitor trends in IST
+    // Calculate daily visitor trends in IST (YYYY-MM-DD)
     const dailyCounts = {};
     sessions?.forEach(s => {
       if (!s.start_time) return;
       const raw = (s.start_time.endsWith('Z') || s.start_time.includes('+')) ? s.start_time : s.start_time.replace(' ', 'T') + 'Z';
       const d = new Date(raw);
-      const istDateStr = d.toLocaleDateString('en-CA', { timeZone: 'Asia/Kolkata' });
+      const istDateStr = new Date(d.getTime() + (5.5 * 60 * 60 * 1000)).toISOString().split('T')[0];
       
       if (!dailyCounts[istDateStr]) {
         dailyCounts[istDateStr] = { date: istDateStr, visitors: 0, ips: new Set() };

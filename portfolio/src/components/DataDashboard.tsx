@@ -695,15 +695,15 @@ function VisitorGraph({ dailyStats = [] }: { dailyStats?: DailyStat[] }) {
 
     const list = [];
     const now = new Date();
-    const istNow = new Date(now.getTime() + (5.5 * 60 * 60 * 1000));
+    const istOffsetMs = 5.5 * 60 * 60 * 1000;
 
     for (let i = timeRange - 1; i >= 0; i--) {
-      const d = new Date(istNow);
-      d.setDate(d.getDate() - i);
-      const dateStr = d.toISOString().split('T')[0];
+      const targetTimeMs = now.getTime() + istOffsetMs - (i * 86400 * 1000);
+      const targetDate = new Date(targetTimeMs);
+      const dateStr = targetDate.toISOString().split('T')[0];
       const found = statsMap.get(dateStr) || { visitors: 0, uniqueIPs: 0 };
       
-      const formattedDate = d.toLocaleDateString('en-IN', { month: 'short', day: 'numeric' });
+      const formattedDate = targetDate.toLocaleDateString('en-IN', { timeZone: 'UTC', month: 'short', day: 'numeric' });
       list.push({
         date: dateStr,
         formattedDate,
